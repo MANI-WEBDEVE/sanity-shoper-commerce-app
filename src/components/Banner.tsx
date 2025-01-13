@@ -20,7 +20,7 @@ const Banner = () => {
       </div>
       <div className="flex items-center justify-center mix-blend-lighten">
       <Image
-        src={"/download.png"}
+        src={"/hero3.png"}
         alt="hero"
         width={800}
         height={800}
