@@ -1,30 +1,17 @@
+'use client'
 import React from "react";
 import { ProductCartType } from "../../types/cartProductsType";
 import { BiTrash } from "react-icons/bi";
+import useCartStore from "@/store/cartStore";
+
 
 const Cart = () => {
-  const cartProductData: ProductCartType[] = [
-    {
-      id: 1,
-      image:
-        "https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp",
-      name: "Shoes",
-      price: 30,
-      quantity: 2,
-    },
-    {
-      id: 2,
-      image:
-        "https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp",
-      name: "Shoes",
-      price: 30,
-      quantity: 1,
-    },
-  ];
+  const cart = useCartStore((state) => state.cart)
+  const removeFromCart = useCartStore((state) => state.removeFromCart)
+  const totalItems = useCartStore((state) => state.totalItems)
+  const cartTotal = useCartStore((state) => state.cartTotal)
 
-  const total = cartProductData.reduce((a, b) => a + b.price * b.quantity, 0);
-
-  return (
+   return (
     <>
       <div className="flex items-center justify-center mt-10">
         <h2 className="text-4xl font-bold text-white">
@@ -43,7 +30,7 @@ const Cart = () => {
             </tr>
           </thead>
           <tbody>
-            {cartProductData.map((product) => (
+            {cart?.map((product:any) => (
               <tr key={product.id}>
                 <td>
                   <div className="flex items-center gap-3">
@@ -69,14 +56,14 @@ const Cart = () => {
                   <p className="font-semibold text-center">${product.price}</p>
                 </td>
                 <th>
-                  <BiTrash className="text-center text-lg ml-4 text-red-500" />
+                  <BiTrash onClick={() => removeFromCart(product._id)} className="text-center text-lg ml-4 text-red-500" />
                 </th>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-        <div className="flex justify-end w-1/2 mx-auto"><p className="font-medium text-white text-lg">Total: ${total}</p></div>
+        <div className="flex justify-end w-1/2 mx-auto"><p className="font-medium text-white text-lg">Total: ${cartTotal}</p></div>
         <div className="flex flex-col mt-10 gap-3  items-center">
             <button className="bg-yellow-700 px-6 py-3 text-lg font-bold text-white  rounded-lg">Check Out Now</button>
             <button className="bg-yellow-700 px-6 py-3 text-lg font-bold text-white rounded-lg">Back to Shopping</button>

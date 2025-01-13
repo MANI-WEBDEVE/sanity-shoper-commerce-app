@@ -11,8 +11,8 @@ export const client = createClient({
 
 
 
-export async function getSlugProduct(slug:any){
-  return client.fetch(groq`*[_type == "product" && slug.current === $slug]{
+export async function getProductBySlug(slug:any){
+  return client.fetch(groq`*[_type == "product" && slug.current == $slug]{
        _id,
     name,
     price,

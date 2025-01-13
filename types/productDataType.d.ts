@@ -1,11 +1,23 @@
-export interface ProductDataType {
-    name: string;
-    image: string;
-    extraImages?: string[];
-    description?: string;
-    CreatedAt: string;
-    _id: string;
-    price: number;
+
+export type ProductDataType = {
+
+    id: string;
+  
     slug: string;
+
+    name: string;
+  
+    description: string;
+  
+    price: number;
+  
     color?: string[];
-}
+  
+    image: string;
+  
+    extraImages?: string[];
+  
+    quantity: number;
+  
+  };
+  
