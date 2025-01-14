@@ -10,6 +10,15 @@ export const client = createClient({
   useCdn: true, // Set to false if statically generating pages, using ISR or tag-based revalidation
 });
 
+const commentsQuery = groq`
+  *[_type == "comment" && product._ref == $productId] {
+    _id,
+    email,
+    commentText,
+    stars,
+    createdAt
+  }
+`;
 
 
 export async function getProductBySlug(slug:any){
@@ -42,6 +51,7 @@ export async function getProducts() {
 }
 
 export async function getOrdersByEmail(email:any) {
+  console.log(email)
   try {
     // Query orders from Sanity with a GROQ query
     const orders = await client.fetch(
@@ -99,3 +109,52 @@ export async function createOrder(email:any ,cart:any) {
     throw new Error('Failed to create order');
   }
 } 
+
+
+export const createComment = async( {productId, commentText, stars, email}:{productId:string, commentText:string, stars:number, email:string} ) => {
+  const currentDate = new Date().toISOString()
+
+  const commentData = {
+    product:{
+      _type:'reference',
+      _ref:productId
+    },
+    email,
+    stars,
+    commentText,
+    createdAt:currentDate
+  }
+
+  const result = client.create({
+    _type:'comment',
+    ...commentData
+  })
+  return result
+
+}
+export async function getCommentsByProductId(productId:string) {
+  const params = { productId };
+  const comments = await client.fetch(commentsQuery, params);
+  //console.log(comments);
+  return comments;
+}
+
+export async function createContact(name: string, email: string, issue: string) {
+  const currentDate = new Date().toISOString();
+
+  const data = {
+    _type: 'contact',
+    name,
+    email,
+    issue,
+    createdAt: currentDate,
+  };
+
+  // Use the client to create a new document in the 'contact' collection
+  const response = await client.create(data).catch((error) => {
+    console.error('Error creating contact:', error.message);
+    throw new Error('Failed to create contact');
+  });
+
+  return response;
+}

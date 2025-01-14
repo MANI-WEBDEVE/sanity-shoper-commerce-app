@@ -1,26 +1,19 @@
+'use client'
 import React from "react";
 import { OrderProductType } from "../../types/orderProductType";
-
-const Order = () => {
-  const cartProductData: OrderProductType[] = [
-    {
-      id: 1,
-      name: "Shoes",
-      price: 30,
-      quantity: 2,
-      deliveryStatus: "transit",
-      paymentStatus: "paid",
-    },
-    {
-      id: 2,
-      name: "Shoes",
-      price: 30,
-      quantity: 1,
-      deliveryStatus: "delivered",
-      paymentStatus: "paid",
-    },
-  ];
-
+import { getOrdersByEmail } from "@/sanity/lib/client";
+import { useUser } from "@clerk/nextjs";
+const Order =  () => {
+  const {user} = useUser()
+  const [product, setProduct] = React.useState([]);
+  React.useEffect(() => {
+    const getOrderData = async () => {
+      const products = await getOrdersByEmail(user?.emailAddresses[0].emailAddress);
+      setProduct(products);
+      console.log(products);
+    }
+    getOrderData();
+  }, [user?.emailAddresses[0].emailAddress]);
   return (
     <>
       <div className="flex items-center justify-center mt-10">
@@ -41,17 +34,17 @@ const Order = () => {
             </tr>
           </thead>
           <tbody>
-            {cartProductData.map((product) => (
-              <tr key={product.id}>
+            {product.map((product:any, index) => (
+              <tr key={index}>
                 <td>
                   <div className="flex items-center gap-3">
                     <div>
-                      <div className="font-bold">{product.name}</div>
+                      <div className="font-light text-xs truncate">{product.name}</div>
                     </div>
                   </div>
                 </td>
                 <td>
-                  <p className="font-semibold ml-5">{product.quantity}</p>
+                  <p className="font-semibold ml-5">{product.qty}</p>
                 </td>
                 <td>
                   <p className="font-semibold ">${product.price}</p>
@@ -59,23 +52,23 @@ const Order = () => {
                 <th>
                   <p
                     className={`${
-                      product.paymentStatus === "paid"
+                      product.paid 
                         ? "text-green-600"
                         : "text-red-600"
                     } text-medium ml-5`}
                   >
-                    {product.paymentStatus}
+                    {product.paid  ? "Paid": "no Paid"}
                   </p>
                 </th>
                 <th>
                   <p
                     className={`${
-                      product.deliveryStatus === "delivered"
+                      product.delivered 
                         ? "text-green-600"
                         : "text-red-600"
                     } ml-5`}
                   >
-                    {product.deliveryStatus}
+                    {product.delivered ? "delivered": "In Transit"}
                   </p>
                 </th>
               </tr>
@@ -88,3 +81,27 @@ const Order = () => {
 };
 
 export default Order;
+// color
+// : 
+// "Blue"
+// createdAt
+// : 
+// "2025-01-13T18:54:07.488Z"
+// delivered
+// : 
+// false
+// email
+// : 
+// "nudmaufon@gmail.com"
+// name
+// : 
+// "Step Up Your Game with Air Jordan Shoes"
+// paid
+// : 
+// true
+// price
+// : 
+// 2000
+// qty
+// : 
+// 2

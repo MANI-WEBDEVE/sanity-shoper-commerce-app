@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 const Banner = () => {
@@ -13,20 +14,28 @@ const Banner = () => {
           <br />
           and enjoy the best shopping experience
         </p>
-
-        <button className="btn bg-yellow-600 text-black font-bold uppercase hover:bg-yellow-800">
-          Get Started
-        </button>
+        <div className="flex items-center gap-3 ">
+          <Link href="/products">
+            <button className="btn bg-yellow-600 text-black font-bold uppercase hover:bg-yellow-800">
+              Get Started
+            </button>
+          </Link>
+          <Link href="/contact">
+            <button className="btn bg-yellow-600 text-black font-bold uppercase hover:bg-yellow-800">
+              Speak Sell
+            </button>
+          </Link>
+        </div>
       </div>
       <div className="flex items-center justify-center mix-blend-lighten">
-      <Image
-        src={"/hero3.png"}
-        alt="hero"
-        width={800}
-        height={800}
-        className="rounded-lg mt-4 mx-auto px- md:mt-0"
+        <Image
+          src={"/hero3.png"}
+          alt="hero"
+          width={800}
+          height={800}
+          className="rounded-lg mt-4 mx-auto px- md:mt-0"
         />
-        </div>
+      </div>
     </div>
   );
 };
